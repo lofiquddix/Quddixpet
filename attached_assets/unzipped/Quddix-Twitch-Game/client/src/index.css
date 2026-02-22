@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 140 40% 96%; /* Soft pastel mint/sky */
+    --foreground: 222 47% 15%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 15%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 15%;
+    
+    --primary: 330 80% 60%; /* Cute pink */
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 190 80% 60%; /* Soft blue */
+    --secondary-foreground: 0 0% 100%;
+    
+    --muted: 140 20% 90%;
+    --muted-foreground: 220 20% 40%;
+    
+    --accent: 45 90% 55%; /* Warm yellow/gold */
+    --accent-foreground: 222 47% 15%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 140 20% 85%;
+    --input: 140 20% 85%;
+    --ring: 330 80% 60%;
+
+    --radius: 1.5rem;
+
+    --font-display: 'Fredoka', sans-serif;
+    --font-body: 'Nunito', sans-serif;
+  }
+
+  body {
+    @apply text-foreground antialiased;
+    font-family: var(--font-body);
+    background-color: hsl(var(--background));
+    overflow: hidden; /* It's an overlay/game, no scrolling */
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    @apply tracking-wide;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-white/40 backdrop-blur-md border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.08)];
+  }
+  
+  .text-stroke {
+    -webkit-text-stroke: 3px white;
+    paint-order: stroke fill;
+  }
+  
+  .text-stroke-sm {
+    -webkit-text-stroke: 2px white;
+    paint-order: stroke fill;
+  }
+  
+  .text-shadow-cute {
+    text-shadow: 0px 4px 10px rgba(0,0,0,0.15);
+  }
+}
+
+/* Custom meadow pattern for non-transparent backgrounds */
+.bg-meadow {
+  background-color: #e0f2fe;
+  background-image: radial-gradient(#bae6fd 2px, transparent 2px), radial-gradient(#bae6fd 2px, transparent 2px);
+  background-size: 60px 60px;
+  background-position: 0 0, 30px 30px;
+}
