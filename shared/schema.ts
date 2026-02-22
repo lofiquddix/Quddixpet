@@ -7,6 +7,9 @@ export const pets = pgTable("pets", {
   username: text("username").notNull().unique(),
   petType: text("pet_type").notNull().default("cat"),
   score: integer("score").notNull().default(0),
+  level: integer("level").notNull().default(1),
+  experience: integer("experience").notNull().default(0),
+  health: integer("health").notNull().default(100),
   lastAction: timestamp("last_action"),
 });
 
@@ -17,5 +20,5 @@ export type Pet = typeof pets.$inferSelect;
 export type WsMessage = 
   | { type: 'state'; payload: { pets: Pet[] } }
   | { type: 'spawn'; payload: Pet }
-  | { type: 'action'; payload: { username: string; action: string; result: string; newScore: number } }
+  | { type: 'action'; payload: { username: string; action: string; result: string; newScore: number, newLevel?: number, newExp?: number, newHealth?: number } }
   | { type: 'event'; payload: { message: string } };
