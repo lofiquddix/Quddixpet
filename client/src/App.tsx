@@ -13,7 +13,7 @@ function Router() {
       <Route path="/" component={Town} />
       
       {/* Support explicit route if needed by external iframe sources */}
-      <Route path="/game" component={Town} />
+      <Route path="/town" component={Town} />
       
       {/* Fallback to 404 */}
       <Route component={NotFound} />

@@ -45,7 +45,6 @@ export async function registerRoutes(
   client.on('message', async (channel, tags, message, self) => {
     if (self) return;
     const username = tags.username;
-    const displayName = tags['display-name'] || username;
     if (!username) return;
 
     const args = message.toLowerCase().split(' ');
@@ -110,14 +109,14 @@ export async function registerRoutes(
         const topList = topPets
           .sort((a, b) => b.level - a.level || b.score - a.score)
           .slice(0, 5)
-          .map((p, i) => `${i+1}. ${p.username} (Lvl ${p.level})`)
+          .map((p, i) => `${i+1}. ${p.username} (Ур. ${p.level})`)
           .join(', ');
         broadcast({ type: 'event', payload: { message: `Топ игроков: ${topList}` } });
       } else if (command === '!dance') {
          if (pet) {
             broadcast({ 
               type: 'action', 
-              payload: { username, action: 'dance', result: 'dancing!', newScore: pet.score } 
+              payload: { username, action: 'dance', result: 'Танцует!', newScore: pet.score } 
             });
          }
       } else if (command === '!attack') {
@@ -128,23 +127,25 @@ export async function registerRoutes(
             const win = Math.random() > 0.5;
             if (win) {
               const newScore = pet.score + 20;
-              const targetNewScore = Math.max(0, targetPet.score - 10);
-              await storage.updatePetScore(pet.id, newScore);
-              await storage.updatePetScore(targetPet.id, targetNewScore);
+              await storage.updatePet(pet.id, { score: newScore });
               broadcast({ 
                 type: 'action', 
                 payload: { username, action: 'attack_win', result: `победил ${targetUsername}! +20`, newScore } 
               });
+              const targetNewScore = Math.max(0, targetPet.score - 10);
+              const targetNewHealth = Math.max(0, targetPet.health - 20);
+              await storage.updatePet(targetPet.id, { score: targetNewScore, health: targetNewHealth });
               broadcast({ 
                 type: 'action', 
-                payload: { username: targetUsername, action: 'attack_lose', result: `проиграл ${username}! -10`, newScore: targetNewScore } 
+                payload: { username: targetUsername, action: 'attack_lose', result: `проиграл ${username}! -10`, newScore: targetNewScore, newHealth: targetNewHealth } 
               });
             } else {
               const newScore = Math.max(0, pet.score - 10);
-              await storage.updatePetScore(pet.id, newScore);
+              const newHealth = Math.max(0, pet.health - 10);
+              await storage.updatePet(pet.id, { score: newScore, health: newHealth });
               broadcast({ 
                 type: 'action', 
-                payload: { username, action: 'attack_fail', result: `неудачно напал на ${targetUsername}! -10`, newScore } 
+                payload: { username, action: 'attack_fail', result: `неудачно напал на ${targetUsername}! -10`, newScore, newHealth } 
               });
             }
           }
