@@ -135,10 +135,13 @@ export function PetEntity({ pet }: PetEntityProps) {
         </AnimatePresence>
       </div>
 
-      {/* Nickname Tag */}
-      <div className="mb-3 px-4 py-1.5 rounded-2xl glass-panel border-white/60 shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-transform hover:scale-110">
+      {/* Nickname & Level Tag */}
+      <div className="mb-3 px-4 py-1.5 rounded-2xl glass-panel border-white/60 shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-transform hover:scale-110 flex flex-col items-center">
         <span className="font-display font-bold text-base text-foreground tracking-wide">
           {pet.username}
+        </span>
+        <span className="text-[10px] font-mono opacity-80 bg-primary/10 px-2 rounded-full mt-0.5">
+          УР. {pet.level}
         </span>
       </div>
 
@@ -159,6 +162,16 @@ export function PetEntity({ pet }: PetEntityProps) {
       >
         {getPetIcon(pet.petType)}
         
+        {/* Health Bar */}
+        <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-black/40 rounded-full overflow-hidden border border-white/20">
+          <motion.div 
+            className="h-full bg-gradient-to-r from-red-500 to-green-500" 
+            initial={{ width: "100%" }}
+            animate={{ width: `${pet.health}%` }}
+            transition={{ duration: 0.5 }}
+          />
+        </div>
+
         {/* Ground shadow that shrinks when jumping */}
         <motion.div 
           className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-10 h-3 bg-black/20 rounded-[100%] blur-[3px] -z-10"

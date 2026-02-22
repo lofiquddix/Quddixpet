@@ -6,7 +6,7 @@ export interface IStorage {
   getPets(): Promise<Pet[]>;
   getPetByUsername(username: string): Promise<Pet | undefined>;
   createPet(pet: InsertPet): Promise<Pet>;
-  updatePetScore(id: number, score: number): Promise<Pet>;
+  updatePet(id: number, updates: Partial<Pet>): Promise<Pet>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -21,8 +21,8 @@ export class DatabaseStorage implements IStorage {
     const [newPet] = await db.insert(pets).values(pet).returning();
     return newPet;
   }
-  async updatePetScore(id: number, score: number): Promise<Pet> {
-    const [updated] = await db.update(pets).set({ score }).where(eq(pets.id, id)).returning();
+  async updatePet(id: number, updates: Partial<Pet>): Promise<Pet> {
+    const [updated] = await db.update(pets).set(updates).where(eq(pets.id, id)).returning();
     return updated;
   }
 }

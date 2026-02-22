@@ -63,13 +63,56 @@ export async function registerRoutes(
         }
       } else if (command === '!work') {
         if (pet) {
+          const expGain = 20;
+          let newExp = pet.experience + expGain;
+          let newLevel = pet.level;
+          let levelUp = false;
+          
+          const expNeeded = newLevel * 100;
+          if (newExp >= expNeeded) {
+            newExp -= expNeeded;
+            newLevel += 1;
+            levelUp = true;
+          }
+
           const newScore = pet.score + 10;
-          await storage.updatePetScore(pet.id, newScore);
+          await storage.updatePet(pet.id, { score: newScore, experience: newExp, level: newLevel });
+          
           broadcast({ 
             type: 'action', 
-            payload: { username, action: 'work', result: '+10', newScore } 
+            payload: { 
+              username, 
+              action: 'work', 
+              result: levelUp ? `Уровень UP! (${newLevel})` : `+10 монет, +${expGain} опыта`, 
+              newScore,
+              newLevel,
+              newExp
+            } 
           });
         }
+      } else if (command === '!heal') {
+        if (pet) {
+          const cost = 50;
+          if (pet.score >= cost) {
+            const newHealth = 100;
+            const newScore = pet.score - cost;
+            await storage.updatePet(pet.id, { score: newScore, health: newHealth });
+            broadcast({ 
+              type: 'action', 
+              payload: { username, action: 'heal', result: 'Полностью здоров!', newScore, newHealth } 
+            });
+          } else {
+             broadcast({ type: 'event', payload: { message: `@${username}, недостаточно монет для лечения (нужно 50)` } });
+          }
+        }
+      } else if (command === '!top') {
+        const topPets = await storage.getPets();
+        const topList = topPets
+          .sort((a, b) => b.level - a.level || b.score - a.score)
+          .slice(0, 5)
+          .map((p, i) => `${i+1}. ${p.username} (Lvl ${p.level})`)
+          .join(', ');
+        broadcast({ type: 'event', payload: { message: `Топ игроков: ${topList}` } });
       } else if (command === '!dance') {
          if (pet) {
             broadcast({ 
