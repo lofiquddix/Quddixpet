@@ -60,7 +60,24 @@ export default function Town() {
 
       {/* UI Overlay Container */}
       <div className="absolute inset-0 pointer-events-none flex z-40">
-        <Leaderboard pets={pets} />
+        <div className="flex-1 flex flex-col">
+          <Leaderboard pets={pets} />
+          
+          {/* Список команд в углу */}
+          <div className="mt-auto p-6 pointer-events-auto">
+            <div className="glass-panel p-4 rounded-2xl max-w-[200px] border-white/40 shadow-xl backdrop-blur-md">
+              <h3 className="text-[10px] font-black mb-2 text-primary uppercase tracking-tighter opacity-80">Команды чата:</h3>
+              <ul className="text-[11px] space-y-1 font-bold leading-tight">
+                <li><span className="text-primary/80">!spawn</span> — войти</li>
+                <li><span className="text-primary/80">!work</span> — опыт</li>
+                <li><span className="text-primary/80">!heal</span> — лечить</li>
+                <li><span className="text-primary/80">!attack</span> — бой</li>
+                <li><span className="text-primary/80">!dance</span> — флекс</li>
+                <li><span className="text-primary/80">!top</span> — доска</li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Pets Layer - Z-index is handled per pet inside PetEntity to create depth */}
